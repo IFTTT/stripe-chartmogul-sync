@@ -1,58 +1,26 @@
 
-# Welcome to your CDK Python project!
+# Stripe ChartMogul Sync
 
-This is a blank project for Python development with CDK.
+![Architecture](/assets/architecture.png)
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+A serverless CDK-based pipeline for syncing Stripe data with ChartMogul
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+This CDK registers a Lambda Function with EventBridge that processes Stripe events. The Lambda Function performs a one-way sync of the customer and related invoices from Stripe to ChartMogul.
 
-To manually create a virtualenv on MacOS and Linux:
+![Sequence Diagram](/assets/sequence-diagram.png)
 
-```
-$ python3 -m venv .venv
-```
+## Setup
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+- Create the virtual environment: `python3 -m venv .venv`
+- Enable the virtual environment: `source .venv/bin/activate`
+- Install dependencies: `pip install -r requirements.txt`
+- Deploy the stack: `cdk deploy`
 
-```
-$ source .venv/bin/activate
-```
+## Events
+- This pipeline listens for Stripe events on the `$default` Event Bus with the following rule:
+  - `source == stripe`
 
-If you are a Windows platform, you would activate the virtualenv like this:
+## Design Notes
 
-```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
-```
-
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
-```
-
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
-
-## Useful commands
-
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
+- Events can arrive from Stripe [out of order](https://stripe.com/docs/webhooks/best-practices#event-ordering), which is why this process has a brute force design that ignores the event payload. Instead, the Lambda Function is simply triggered when a customer has changed in some way.
+- Events can flow into this pipeline from anywhere. Typically the two sources are Stripe webhook events or a reconsiliation process that might be run to update customer records that might be out of sync.

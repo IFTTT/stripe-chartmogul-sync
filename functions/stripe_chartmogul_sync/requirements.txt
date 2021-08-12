@@ -1,0 +1,5 @@
+# These are the runtime dependencies that will be packaged with the Lambda
+# Note: No need to import Boto as it is already provisioned in the Lambda runtime
+aws_xray_sdk == 2.8.0
+stripe == 2.60.0
+chartmogul == 1.5.0
