@@ -30,10 +30,17 @@ class CdkStripeChartmogulSyncStack(cdk.Stack):
             )
 
         # Required environment variable
+        chartmogul_api_token_arn = os.getenv("CHARTMOGUL_API_TOKEN_ARN")
+        if not chartmogul_api_token_arn:
+            raise Exception(
+                "Unable to get ChartMogul API token ARN from environment: CHARTMOGUL_API_TOKEN_ARN"
+            )
+
+        # Required environment variable
         chartmogul_api_key_arn = os.getenv("CHARTMOGUL_API_KEY_ARN")
         if not chartmogul_api_key_arn:
             raise Exception(
-                "Unable to get Stripe API key ARN from environment: STRIPE_API_KEY_ARN"
+                "Unable to get ChartMogul API key ARN from environment: CHARTMOGUL_API_KEY_ARN"
             )
 
         # Lambda function to check signature and push to SQS
@@ -47,6 +54,7 @@ class CdkStripeChartmogulSyncStack(cdk.Stack):
             tracing=aws_lambda.Tracing.ACTIVE,
             environment={
                 "STRIPE_API_KEY_ARN": stripe_api_key_arn,
+                "CHARTMOGUL_API_TOKEN_ARN": chartmogul_api_token_arn,
                 "CHARTMOGUL_API_KEY_ARN": chartmogul_api_key_arn,
             },
         )
