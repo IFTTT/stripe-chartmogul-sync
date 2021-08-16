@@ -11,6 +11,7 @@ from cdk_stripe_chartmogul_sync.cdk_stripe_chartmogul_sync_stack import (
 
 
 app = core.App()
+
 CdkStripeChartmogulSyncStack(
     app,
     "CdkStripeChartmogulSyncStack",
