@@ -22,6 +22,7 @@ setuptools.setup(
         "boto3==1.18.18",
         "boto3-stubs[essential,secretsmanager, events]",
         "stripe==2.60.0",
+        "chartmogul == 1.5.0",
         "aws_xray_sdk == 2.8.0",
         "python-dotenv == 0.19.0",
         "pytest",
