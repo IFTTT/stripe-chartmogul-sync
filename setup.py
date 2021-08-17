@@ -12,8 +12,6 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="IFTTT",
-    package_dir={"": "cdk_stripe_chartmogul_sync"},
-    packages=setuptools.find_packages(where="cdk_stripe_chartmogul_sync"),
     install_requires=[
         "aws-cdk.core==1.117.0",
         "aws_cdk.aws_events==1.117.0",
@@ -26,6 +24,7 @@ setuptools.setup(
         "stripe==2.60.0",
         "aws_xray_sdk == 2.8.0",
         "python-dotenv == 0.19.0",
+        "pytest",
         "black",
     ],
     python_requires=">=3.6",
