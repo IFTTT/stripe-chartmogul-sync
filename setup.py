@@ -27,6 +27,7 @@ setuptools.setup(
         "python-dotenv == 0.19.0",
         "pytest",
         "black",
+        "pandas"
     ],
     python_requires=">=3.6",
     classifiers=[
