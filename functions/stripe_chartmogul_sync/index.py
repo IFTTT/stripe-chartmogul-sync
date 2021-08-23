@@ -104,7 +104,7 @@ def source_id():
     req = rq.get(
         "https://api.chartmogul.com/v1/data_sources",
         params = payload,
-        auth=(CM_TOKEN, CM_SECRET)
+        auth=(chartmogul_api_token, chartmogul_api_key)
     ).json()
     source_id = req['data_sources'][0]['uuid']
 
@@ -136,7 +136,8 @@ def upload_plan(invoice, source_id, platform):
 
 def get_plan_id(ext_plan_id):
     req = rq.get(
-        "https://api.chartmogul.com/v1/plans?external_id="+ext_plan_id
+        "https://api.chartmogul.com/v1/plans?external_id="+ext_plan_id,
+        auth = (chartmogul_api_token, chartmogul_api_key)
     ).json()
     return(req['uuid'])
 
@@ -264,7 +265,7 @@ def update_invoices(event, source_id):
             inv_url = "https://api.chartmogul.com/v1/import/customers/"+cm_cus_uuid+"/invoices"
             cm_inv =rq.get(
                 inv_url,
-                auth=(CM_TOKEN, CM_SECRET)
+                auth=(chartmogul_api_token, chartmogul_api_key)
             ).json()
 
             cm_invoice_ids = []
